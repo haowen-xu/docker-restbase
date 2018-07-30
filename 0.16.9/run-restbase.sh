@@ -114,7 +114,11 @@ spec_root: &spec_root
       name: http
       options:
         allow:
-          - pattern: ${MW_PARSOID_URL:-http://parsoid:8000}
+          - pattern: ${RB_CONF_PARSOID_HOST:-http://parsoid:8000}
+            forward_headers: true
+          - pattern: ${RB_CONF_MATHOID_HOST:-http://mathoid:10044}
+            forward_headers: true
+          - pattern: ${RB_CONF_PDF_URI:-http://pdf:3000}
             forward_headers: true
           - pattern: /^https?:\/\//
 EOT
@@ -157,6 +161,10 @@ EOT
     fi
 done
 
+cat <<EOT >> config.yaml
+    /{domain:wikimedia.org}: *default_project  # special hack for getting around the terrible mathoid configs
+EOT
+
 # see https://phabricator.wikimedia.org/diffusion/GRES/browse/master/config.example.yaml
 # see https://phabricator.wikimedia.org/diffusion/GRES/browse/master/config.example.wikimedia.yaml
 cat <<EOT >> config.yaml
@@ -190,6 +198,7 @@ num_workers: ${RB_CONF_NUM_WORKERS:-'0'}
 EOT
 
 # Use HTTP instead of HTTPS in pdf.yaml
-sed -i -e 's#https://{{domain}}#http://{{domain}}#' v1/pdf.yaml
+sed -i -e 's#https://{{domain}}#http://{{domain}}#g' v1/pdf.yaml
+sed -i -e 's#wikimedia.org#{domain}#g' v1/mathoid.yaml
 
 su -c 'npm start' $RB_USER

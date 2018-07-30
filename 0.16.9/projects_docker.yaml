@@ -18,6 +18,9 @@
 
 # First, we define some project templates. These are referenced / shared
 # between domains in the root_spec further down.
+
+# REFERENCE: https://phabricator.wikimedia.org/diffusion/GRES/browse/master/projects/wmf_default.yaml
+
 paths:
   /{api:v1}:
     x-modules:
@@ -43,15 +46,17 @@ paths:
                 - path: v1/mobileapps.yaml
                   options: '{{merge({"response_cache_control": options.purged_cache_control},
                                 options.mobileapps)}}'
+                - path: v1/graphoid.yaml
+                  options: '{{options.graphoid}}'
                 - path: v1/pdf.js
                   options: '{{options.pdf}}'
             /transform:
               x-modules:
                 - path: v1/transform.yaml
-#            /media:
-#              x-modules:
-#                - path: v1/mathoid.yaml
-#                  options: '{{options.mathoid}}'
+            /media:
+              x-modules:
+                - path: v1/mathoid.yaml
+                  options: '{{options.mathoid}}'
 #            /data:
 #              x-modules:
 #                - path: v1/citoid.js
@@ -95,6 +100,10 @@ paths:
                   options:
                     parsoidHost: '{{options.parsoid.host}}'
                     response_cache_control: '{{options.purged_cache_control}}'
+            /mathoid:
+              x-modules:
+                - path: sys/mathoid.js
+                  options: '{{options.mathoid}}'
             /mobileapps:
               x-modules:
                 - path: sys/mobileapps.js
