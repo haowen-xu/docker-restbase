@@ -1,5 +1,7 @@
 # Containerized MediaWiki RESTbase service
 
+![https://travis-ci.org/haowen-xu/docker-restbase](https://travis-ci.org/haowen-xu/docker-restbase.svg?branch=master)
+
 This repo contains [Docker](https://docs.docker.com/) container to run the [RESTbase](https://www.mediawiki.org/wiki/RESTBase) proxy.
 
 It is a part of [Containerized Mediawiki install](https://github.com/pastakhov/compose-mediawiki-ubuntu) project.
